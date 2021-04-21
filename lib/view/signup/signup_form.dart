@@ -36,6 +36,14 @@ class SignUpForm extends StatelessWidget {
               const SizedBox(height: 8.0),
               _OrganizationInput(),
               const SizedBox(height: 8.0),
+              _ServiceTimeStartInput(),
+              const SizedBox(height: 8.0),
+              _ServiceTimeEndInput(),
+              const SizedBox(height: 8.0),
+              _ServiceDaysInput(),
+              const SizedBox(height: 8.0),
+              _EmergencyServicesInput(),
+              const SizedBox(height: 8.0),
               _SignUpButton(),
             ],
           ),
@@ -191,6 +199,179 @@ class _OrganizationInput extends StatelessWidget {
           decoration: InputDecoration(
             labelText: 'Organization Name',
           ),
+        );
+      },
+    );
+  }
+}
+
+class _ServiceTimeStartInput extends StatefulWidget {
+  @override
+  __ServiceTimeStartInputState createState() => __ServiceTimeStartInputState();
+}
+
+class __ServiceTimeStartInputState extends State<_ServiceTimeStartInput> {
+  TimeOfDay _timeOfDay = TimeOfDay.now();
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SignupCubit, SignupState>(
+      buildWhen: (previous, current) => previous.dob != current.dob,
+      builder: (context, state) {
+        return Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Text('Consultation Time Start: '),
+            const SizedBox(width: 10),
+            Text(_timeOfDay.toString()),
+            const SizedBox(width: 10),
+            ElevatedButton(
+              onPressed: () async {
+                final pickedTime = await showTimePicker(
+                  context: context,
+                  initialTime: TimeOfDay(hour: 00, minute: 00),
+                  initialEntryMode: TimePickerEntryMode.input,
+                  builder: (context, child) {
+                    return MediaQuery(
+                        data: MediaQuery.of(context)
+                            .copyWith(alwaysUse24HourFormat: true),
+                        child: child!);
+                  },
+                );
+
+                if (pickedTime != null && pickedTime != _timeOfDay) {
+                  setState(() {
+                    _timeOfDay = pickedTime;
+                    context
+                        .read<SignupCubit>()
+                        .serviceTimeStartChanged(_timeOfDay.toString());
+                  });
+                }
+              },
+              child: Text('Select Service Time Start'),
+            )
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _ServiceTimeEndInput extends StatefulWidget {
+  @override
+  __ServiceTimeEndInputState createState() => __ServiceTimeEndInputState();
+}
+
+class __ServiceTimeEndInputState extends State<_ServiceTimeEndInput> {
+  TimeOfDay _timeOfDay = TimeOfDay.now();
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SignupCubit, SignupState>(
+      buildWhen: (previous, current) => previous.dob != current.dob,
+      builder: (context, state) {
+        return Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Text('Consultation Time End: '),
+            const SizedBox(width: 10),
+            Text(_timeOfDay.toString()),
+            const SizedBox(width: 10),
+            ElevatedButton(
+              onPressed: () async {
+                final pickedTime = await showTimePicker(
+                  context: context,
+                  initialTime: TimeOfDay(hour: 00, minute: 00),
+                  initialEntryMode: TimePickerEntryMode.input,
+                  builder: (context, child) {
+                    return MediaQuery(
+                        data: MediaQuery.of(context)
+                            .copyWith(alwaysUse24HourFormat: true),
+                        child: child!);
+                  },
+                );
+
+                if (pickedTime != null && pickedTime != _timeOfDay) {
+                  setState(() {
+                    _timeOfDay = pickedTime;
+                    context
+                        .read<SignupCubit>()
+                        .serviceTimeEndChanged(_timeOfDay.toString());
+                  });
+                }
+              },
+              child: Text('Select Service Time End'),
+            )
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _ServiceDaysInput extends StatefulWidget {
+  @override
+  __ServiceDaysInputState createState() => __ServiceDaysInputState();
+}
+
+class __ServiceDaysInputState extends State<_ServiceDaysInput> {
+  List<bool> _values = List.filled(7, false);
+  final List<Text> _days = [
+    Text('Monday'),
+    Text('Tuesday'),
+    Text('Wednesday'),
+    Text('Thursday'),
+    Text('Friday'),
+    Text('Saturday'),
+    Text('Sunday'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SignupCubit, SignupState>(
+      builder: (context, state) {
+        return ListView.builder(
+          itemCount: 7,
+          itemBuilder: (context, index) {
+            return CheckboxListTile(
+              title: _days[index],
+              value: _values[index],
+              onChanged: (value) {
+                setState(() {
+                  _values[index] = value!;
+                  context.read<SignupCubit>().serviceDaysChanged(_values);
+                });
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+class _EmergencyServicesInput extends StatefulWidget {
+  @override
+  __EmergencyServicesInputState createState() =>
+      __EmergencyServicesInputState();
+}
+
+class __EmergencyServicesInputState extends State<_EmergencyServicesInput> {
+  bool _checked = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SignupCubit, SignupState>(
+      builder: (context, state) {
+        return CheckboxListTile(
+          title: Text('Do you provide 24 hrs emergency services?'),
+          value: _checked,
+          onChanged: (value) {
+            setState(() {
+              _checked = value!;
+              context
+                  .read<SignupCubit>()
+                  .provideEmergencyServicesChanged(_checked);
+            });
+          },
         );
       },
     );

@@ -12,14 +12,23 @@ class User extends Equatable {
   final String? photo;
   final DateTime? dob;
   final String? organization;
+  final bool? provideEmergencyServices;
+  final String? serviceTimeStart;
+  final String? serviceTimeEnd;
+  final String? serviceDays;
 
-  const User(
-      {required this.id,
-      required this.email,
-      required this.name,
-      this.photo,
-      this.dob,
-      this.organization});
+  const User({
+    required this.id,
+    required this.email,
+    required this.name,
+    this.photo,
+    this.dob,
+    this.organization,
+    this.provideEmergencyServices,
+    this.serviceTimeStart,
+    this.serviceTimeEnd,
+    this.serviceDays,
+  });
 
   static const nouser = User(id: '', email: '', name: '');
 

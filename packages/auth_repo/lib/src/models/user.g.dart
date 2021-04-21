@@ -15,6 +15,10 @@ User _$UserFromJson(Map<String, dynamic> json) {
     photo: json['photo'] as String?,
     dob: json['dob'] == null ? null : DateTime.parse(json['dob'] as String),
     organization: json['organization'] as String?,
+    provideEmergencyServices: json['provideEmergencyServices'] as bool?,
+    serviceTimeStart: json['serviceTimeStart'] as String?,
+    serviceTimeEnd: json['serviceTimeEnd'] as String?,
+    serviceDays: json['serviceDays'] as String?,
   );
 }
 
@@ -25,4 +29,8 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'photo': instance.photo,
       'dob': instance.dob?.toIso8601String(),
       'organization': instance.organization,
+      'provideEmergencyServices': instance.provideEmergencyServices,
+      'serviceTimeStart': instance.serviceTimeStart,
+      'serviceTimeEnd': instance.serviceTimeEnd,
+      'serviceDays': instance.serviceDays,
     };

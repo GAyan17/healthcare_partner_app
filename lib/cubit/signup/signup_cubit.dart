@@ -8,7 +8,17 @@ part 'signup_state.dart';
 
 class SignupCubit extends Cubit<SignupState> {
   SignupCubit(this._authRepository)
-      : super(SignupState(name: '', dob: DateTime.now(), organization: ''));
+      : super(
+          SignupState(
+            name: '',
+            dob: DateTime.now(),
+            organization: '',
+            provideEmergencyServices: false,
+            serviceTimeStart: '',
+            serviceTimeEnd: '',
+            serviceDays: '',
+          ),
+        );
 
   final AuthRepository _authRepository;
 
@@ -69,6 +79,29 @@ class SignupCubit extends Cubit<SignupState> {
     emit(state.copyWith(organization: organization));
   }
 
+  void serviceTimeStartChanged(String serviceTimeStart) {
+    emit(state.copyWith(serviceTimeStart: serviceTimeStart));
+  }
+
+  void serviceTimeEndChanged(String serviceTimeEnd) {
+    emit(state.copyWith(serviceTimeEnd: serviceTimeEnd));
+  }
+
+  void serviceDaysChanged(List<bool> days) {
+    final _days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+    var serviceDays = '';
+    for (var i = 0; i < days.length; i++) {
+      if (days[i]) {
+        serviceDays = serviceDays + _days[i];
+      }
+    }
+    emit(state.copyWith(serviceDays: serviceDays));
+  }
+
+  void provideEmergencyServicesChanged(bool provideEmergencyServices) {
+    emit(state.copyWith(provideEmergencyServices: provideEmergencyServices));
+  }
+
   Future<void> signUpFormSubmitted() async {
     if (!state.status.isValidated) return;
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
@@ -79,6 +112,10 @@ class SignupCubit extends Cubit<SignupState> {
         name: state.name,
         dob: state.dob,
         organization: state.organization,
+        provideEmergencyServices: state.provideEmergencyServices,
+        serviceDays: state.serviceDays,
+        serviceTimeEnd: state.serviceTimeEnd,
+        serviceTimeStart: state.serviceTimeStart,
       );
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } on Exception {

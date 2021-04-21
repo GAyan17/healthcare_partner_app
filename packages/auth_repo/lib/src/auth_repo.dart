@@ -32,22 +32,32 @@ class AuthRepository {
 
   User get currentUser => _user;
 
-  Future<void> signUp(
-      {required String email,
-      required String password,
-      required String name,
-      required DateTime dob,
-      required String organization}) async {
+  Future<void> signUp({
+    required String email,
+    required String password,
+    required String name,
+    required DateTime dob,
+    required String organization,
+    required bool provideEmergencyServices,
+    required String serviceTimeStart,
+    required String serviceTimeEnd,
+    required String serviceDays,
+  }) async {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
       var firebaseUser = _firebaseAuth.currentUser!;
       var newUser = User(
-          id: firebaseUser.uid,
-          email: firebaseUser.email,
-          name: name,
-          dob: dob,
-          organization: organization);
+        id: firebaseUser.uid,
+        email: firebaseUser.email,
+        name: name,
+        dob: dob,
+        organization: organization,
+        provideEmergencyServices: provideEmergencyServices,
+        serviceTimeStart: serviceTimeStart,
+        serviceTimeEnd: serviceTimeEnd,
+        serviceDays: serviceDays,
+      );
       await _firestore
           .collection(_partnerCollection)
           .doc(firebaseUser.uid)
