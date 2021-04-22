@@ -9,10 +9,9 @@ class User extends Equatable {
   final String id;
   final String? email;
   final String? name;
-  final String? photo;
-  final DateTime? dob;
   final String? organization;
   final bool? provideEmergencyServices;
+  final List<String>? serviceTypes;
   final String? serviceTimeStart;
   final String? serviceTimeEnd;
   final String? serviceDays;
@@ -21,10 +20,9 @@ class User extends Equatable {
     required this.id,
     required this.email,
     required this.name,
-    this.photo,
-    this.dob,
     this.organization,
     this.provideEmergencyServices,
+    this.serviceTypes,
     this.serviceTimeStart,
     this.serviceTimeEnd,
     this.serviceDays,
@@ -41,5 +39,14 @@ class User extends Equatable {
   Map<String, dynamic> toJson() => _$UserToJson(this);
 
   @override
-  List<Object?> get props => [id, email, name, photo, dob, organization];
+  List<Object?> get props => [
+        id,
+        email,
+        name,
+        organization,
+        serviceTypes,
+        serviceTimeStart,
+        serviceTimeEnd,
+        serviceDays,
+      ];
 }
