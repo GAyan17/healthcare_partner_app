@@ -24,9 +24,11 @@ class AuthRepository {
               .doc(firebaseUser.uid)
               .get();
           _user = User.fromJson(documentSnapshot.data()!);
+          print(_user.toString());
           return _user;
         }
         _user = User.nouser;
+        print(_user.toString());
         return _user;
       });
 

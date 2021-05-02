@@ -15,15 +15,15 @@ class SignUpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          'Sign Up',
+          style: Theme.of(context).textTheme.headline4,
+        ),
+      ),
       body: Container(
         margin: const EdgeInsets.all(8.0),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: Colors.black,
-            style: BorderStyle.solid,
-            width: 0.95,
-          ),
-        ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: BlocProvider<SignupCubit>(

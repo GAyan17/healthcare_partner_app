@@ -2,7 +2,8 @@ import 'package:auth_repo/auth_repo.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
-import 'package:healthcare_partner_app/models/models.dart';
+
+import '../../models/models.dart';
 
 part 'signup_state.dart';
 
@@ -10,13 +11,11 @@ class SignupCubit extends Cubit<SignupState> {
   SignupCubit(this._authRepository)
       : super(
           SignupState(
-            name: '',
-            dob: DateTime.now(),
-            organization: '',
             provideEmergencyServices: false,
             serviceTimeStart: '',
             serviceTimeEnd: '',
             serviceDays: '',
+            serviceTypes: <String>[],
           ),
         );
 
@@ -68,15 +67,41 @@ class SignupCubit extends Cubit<SignupState> {
   }
 
   void nameChanged(String value) {
-    emit(state.copyWith(name: value));
-  }
-
-  void dobChanged(DateTime dob) {
-    emit(state.copyWith(dob: dob));
+    final name = NameInput.dirty(value: value);
+    emit(state.copyWith(
+      name: name,
+      status: Formz.validate([
+        state.email,
+        state.password,
+        state.confirmedPassword,
+        name,
+        state.organization,
+      ]),
+    ));
   }
 
   void orgChanged(String organization) {
-    emit(state.copyWith(organization: organization));
+    final org = OrganizationInput.dirty(value: organization);
+    emit(state.copyWith(
+      organization: org,
+      status: Formz.validate([
+        state.email,
+        state.password,
+        state.confirmedPassword,
+        state.name,
+        org,
+      ]),
+    ));
+  }
+
+  void serviceTypeChanged(List<String> values, List<bool> selected) {
+    final serviceValues = <String>[];
+    for (var i = 0; i < values.length; i++) {
+      if (selected[i]) {
+        serviceValues.add(values[i]);
+      }
+    }
+    emit(state.copyWith(serviceTypes: serviceValues));
   }
 
   void serviceTimeStartChanged(String serviceTimeStart) {
@@ -109,9 +134,8 @@ class SignupCubit extends Cubit<SignupState> {
       await _authRepository.signUp(
         email: state.email.value,
         password: state.password.value,
-        name: state.name,
-        dob: state.dob,
-        organization: state.organization,
+        name: state.name.value,
+        organization: state.organization.value,
         provideEmergencyServices: state.provideEmergencyServices,
         serviceDays: state.serviceDays,
         serviceTimeEnd: state.serviceTimeEnd,

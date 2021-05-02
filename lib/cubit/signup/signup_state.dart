@@ -6,9 +6,9 @@ class SignupState extends Equatable {
     this.password = const Password.pure(),
     this.confirmedPassword = const ConfirmedPassword.pure(),
     this.status = FormzStatus.pure,
-    required this.name,
-    required this.dob,
-    required this.organization,
+    this.name = const NameInput.pure(),
+    this.organization = const OrganizationInput.pure(),
+    required this.serviceTypes,
     required this.provideEmergencyServices,
     required this.serviceTimeStart,
     required this.serviceTimeEnd,
@@ -19,27 +19,27 @@ class SignupState extends Equatable {
   final Password password;
   final ConfirmedPassword confirmedPassword;
   final FormzStatus status;
-  final String name;
-  final DateTime dob;
-  final String organization;
+  final NameInput name;
+  final OrganizationInput organization;
   final bool provideEmergencyServices;
+  final List<String> serviceTypes;
   final String serviceTimeStart;
   final String serviceTimeEnd;
   final String serviceDays;
 
   @override
   List<Object?> get props =>
-      [email, password, confirmedPassword, status, name, dob, organization];
+      [email, password, confirmedPassword, status, name, organization];
 
   SignupState copyWith({
     Email? email,
     Password? password,
     ConfirmedPassword? confirmedPassword,
     FormzStatus? status,
-    String? name,
-    DateTime? dob,
-    String? organization,
+    NameInput? name,
+    OrganizationInput? organization,
     bool? provideEmergencyServices,
+    List<String>? serviceTypes,
     String? serviceTimeStart,
     String? serviceTimeEnd,
     String? serviceDays,
@@ -50,13 +50,13 @@ class SignupState extends Equatable {
       confirmedPassword: confirmedPassword ?? this.confirmedPassword,
       status: status ?? this.status,
       name: name ?? this.name,
-      dob: dob ?? this.dob,
       organization: organization ?? this.organization,
       provideEmergencyServices:
           provideEmergencyServices ?? this.provideEmergencyServices,
       serviceTimeStart: serviceTimeStart ?? this.serviceTimeStart,
       serviceTimeEnd: serviceTimeEnd ?? this.serviceTimeEnd,
       serviceDays: serviceDays ?? this.serviceDays,
+      serviceTypes: serviceTypes ?? this.serviceTypes,
     );
   }
 }

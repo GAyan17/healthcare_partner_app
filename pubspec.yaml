@@ -23,6 +23,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  appointment_repository:
+    path: packages/appointment_repository
   auth_repo:
     path: packages/auth_repo
   bloc: ^7.0.0

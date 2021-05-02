@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:healthcare_partner_app/util/constants.dart';
 
 import '../../cubit/signup/signup_cubit.dart';
 
@@ -17,36 +18,34 @@ class SignUpForm extends StatelessWidget {
             );
         }
       },
-      child: Align(
-        alignment: const Alignment(0, -1 / 3),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(height: 8.0),
-              _NameInput(),
-              const SizedBox(height: 8.0),
-              _EmailInput(),
-              const SizedBox(height: 8.0),
-              _PasswordInput(),
-              const SizedBox(height: 8.0),
-              _ConfirmPasswordInput(),
-              const SizedBox(height: 8.0),
-              _DateOfBirthInput(),
-              const SizedBox(height: 8.0),
-              _OrganizationInput(),
-              const SizedBox(height: 8.0),
-              _ServiceTimeStartInput(),
-              const SizedBox(height: 8.0),
-              _ServiceTimeEndInput(),
-              const SizedBox(height: 8.0),
-              _ServiceDaysInput(),
-              const SizedBox(height: 8.0),
-              _EmergencyServicesInput(),
-              const SizedBox(height: 8.0),
-              _SignUpButton(),
-            ],
-          ),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 8.0),
+            _NameInput(),
+            const SizedBox(height: 8.0),
+            _EmailInput(),
+            const SizedBox(height: 8.0),
+            _PasswordInput(),
+            const SizedBox(height: 8.0),
+            _ConfirmPasswordInput(),
+            const SizedBox(height: 8.0),
+            _OrganizationInput(),
+            const SizedBox(height: 8.0),
+            _ServiceTypeInput(),
+            const SizedBox(height: 8.0),
+            _ServiceTimeStartInput(),
+            const SizedBox(height: 8.0),
+            _ServiceTimeEndInput(),
+            const SizedBox(height: 8.0),
+            _ServiceDaysInput(),
+            const SizedBox(height: 8.0),
+            _EmergencyServicesInput(),
+            const SizedBox(height: 8.0),
+            _SignUpButton(),
+          ],
         ),
       ),
     );
@@ -133,53 +132,9 @@ class _NameInput extends StatelessWidget {
           onChanged: (value) => context.read<SignupCubit>().nameChanged(value),
           decoration: InputDecoration(
             labelText: 'Name',
+            helperText: '',
+            errorText: state.name.invalid ? 'Name must not be Empty' : null,
           ),
-        );
-      },
-    );
-  }
-}
-
-class _DateOfBirthInput extends StatefulWidget {
-  @override
-  __DateOfBirthInputState createState() => __DateOfBirthInputState();
-}
-
-class __DateOfBirthInputState extends State<_DateOfBirthInput> {
-  DateTime _selectedDate = DateTime.now();
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<SignupCubit, SignupState>(
-      buildWhen: (previous, current) => previous.dob != current.dob,
-      builder: (context, state) {
-        return Row(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Text('Date of Birth: '),
-            const SizedBox(width: 10),
-            Text(_selectedDate.toString().split(':').first),
-            const SizedBox(width: 10),
-            ElevatedButton(
-              onPressed: () async {
-                final pickedDate = await showDatePicker(
-                    context: context,
-                    initialDate: _selectedDate,
-                    firstDate: DateTime(1950),
-                    lastDate: DateTime(2050),
-                    initialEntryMode: DatePickerEntryMode.input,
-                    initialDatePickerMode: DatePickerMode.year);
-
-                if (pickedDate != null && pickedDate != _selectedDate) {
-                  setState(() {
-                    _selectedDate = pickedDate;
-                    context.read<SignupCubit>().dobChanged(_selectedDate);
-                  });
-                }
-              },
-              child: Text('Select Date of Birth'),
-            )
-          ],
         );
       },
     );
@@ -198,7 +153,108 @@ class _OrganizationInput extends StatelessWidget {
               context.read<SignupCubit>().orgChanged(organization),
           decoration: InputDecoration(
             labelText: 'Organization Name',
+            helperText: '',
+            errorText: state.organization.invalid
+                ? 'Organization Name must not be empty'
+                : null,
           ),
+        );
+      },
+    );
+  }
+}
+
+class _ServiceTypeInput extends StatefulWidget {
+  @override
+  __ServiceTypeInputState createState() => __ServiceTypeInputState();
+}
+
+class __ServiceTypeInputState extends State<_ServiceTypeInput> {
+  final TextEditingController _controller = TextEditingController();
+
+  final List<String> _value = [...serviceTypes];
+  final List<bool> _selected =
+      List.filled(serviceTypes.length, false, growable: true);
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  List<Widget> buildChips(BuildContext context) {
+    var chips = <Widget>[];
+    for (var i = 0; i < _value.length; i++) {
+      chips.add(InputChip(
+        label: Text(_value[i]),
+        selected: _selected[i],
+        elevation: 10,
+        pressElevation: 5,
+        shadowColor: Colors.teal,
+        onPressed: () {
+          setState(() {
+            _selected[i] = !_selected[i];
+            context.read<SignupCubit>().serviceTypeChanged(_value, _selected);
+          });
+        },
+        onDeleted: () {
+          setState(() {
+            _value.removeAt(i);
+            _selected.removeAt(i);
+            context.read<SignupCubit>().serviceTypeChanged(_value, _selected);
+          });
+        },
+      ));
+    }
+    return chips;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SignupCubit, SignupState>(
+      builder: (context, state) {
+        return Column(
+          children: [
+            const Text('Services: '),
+            Wrap(
+              children: buildChips(context)
+                ..add(IconButton(
+                    onPressed: () async {
+                      await showDialog(
+                        context: context,
+                        builder: (ctx) {
+                          return AlertDialog(
+                            title: Text('Add Service:'),
+                            content: TextField(
+                              controller: _controller,
+                            ),
+                            actions: [
+                              ElevatedButton(
+                                onPressed: () => Navigator.pop(ctx),
+                                child: Text('Cancel'),
+                              ),
+                              ElevatedButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _value.add(_controller.text);
+                                      _selected.add(true);
+                                      _controller.clear();
+                                      context
+                                          .read<SignupCubit>()
+                                          .serviceTypeChanged(
+                                              _value, _selected);
+                                    });
+                                    Navigator.pop(ctx);
+                                  },
+                                  child: Text('Add')),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    icon: Icon(Icons.add))),
+            ),
+          ],
         );
       },
     );
@@ -215,14 +271,16 @@ class __ServiceTimeStartInputState extends State<_ServiceTimeStartInput> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SignupCubit, SignupState>(
-      buildWhen: (previous, current) => previous.dob != current.dob,
+      buildWhen: (previous, current) =>
+          previous.serviceTimeStart != current.serviceTimeStart,
       builder: (context, state) {
         return Row(
           mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Text('Consultation Time Start: '),
             const SizedBox(width: 10),
-            Text(_timeOfDay.toString()),
+            Text(_timeOfDay.format(context)),
             const SizedBox(width: 10),
             ElevatedButton(
               onPressed: () async {
@@ -247,7 +305,7 @@ class __ServiceTimeStartInputState extends State<_ServiceTimeStartInput> {
                   });
                 }
               },
-              child: Text('Select Service Time Start'),
+              child: Text('Set Time'),
             )
           ],
         );
@@ -266,14 +324,16 @@ class __ServiceTimeEndInputState extends State<_ServiceTimeEndInput> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SignupCubit, SignupState>(
-      buildWhen: (previous, current) => previous.dob != current.dob,
+      buildWhen: (previous, current) =>
+          previous.serviceTimeEnd != current.serviceTimeEnd,
       builder: (context, state) {
         return Row(
           mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Text('Consultation Time End: '),
             const SizedBox(width: 10),
-            Text(_timeOfDay.toString()),
+            Text(_timeOfDay.format(context)),
             const SizedBox(width: 10),
             ElevatedButton(
               onPressed: () async {
@@ -298,7 +358,7 @@ class __ServiceTimeEndInputState extends State<_ServiceTimeEndInput> {
                   });
                 }
               },
-              child: Text('Select Service Time End'),
+              child: Text('Set Time'),
             )
           ],
         );
@@ -313,7 +373,7 @@ class _ServiceDaysInput extends StatefulWidget {
 }
 
 class __ServiceDaysInputState extends State<_ServiceDaysInput> {
-  List<bool> _values = List.filled(7, false);
+  final List<bool> _values = List.filled(7, false);
   final List<Text> _days = [
     Text('Monday'),
     Text('Tuesday'),
@@ -329,6 +389,7 @@ class __ServiceDaysInputState extends State<_ServiceDaysInput> {
     return BlocBuilder<SignupCubit, SignupState>(
       builder: (context, state) {
         return ListView.builder(
+          shrinkWrap: true,
           itemCount: 7,
           itemBuilder: (context, index) {
             return CheckboxListTile(
