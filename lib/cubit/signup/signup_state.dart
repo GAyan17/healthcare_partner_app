@@ -8,11 +8,11 @@ class SignupState extends Equatable {
     this.status = FormzStatus.pure,
     this.name = const NameInput.pure(),
     this.organization = const OrganizationInput.pure(),
-    required this.serviceTypes,
-    required this.provideEmergencyServices,
-    required this.serviceTimeStart,
-    required this.serviceTimeEnd,
-    required this.serviceDays,
+    this.serviceTypes = const ServiceTypesInput.pure(),
+    this.provideEmergencyServices = const ProvideEmergencyServicesInput.pure(),
+    this.serviceTimeStart = const ServiceTimeStartInput.pure(),
+    this.serviceTimeEnd = const ServiceTimeEndInput.pure(),
+    this.serviceDays = const ServiceDaysInput.pure(),
   });
 
   final Email email;
@@ -21,15 +21,26 @@ class SignupState extends Equatable {
   final FormzStatus status;
   final NameInput name;
   final OrganizationInput organization;
-  final bool provideEmergencyServices;
-  final List<String> serviceTypes;
-  final String serviceTimeStart;
-  final String serviceTimeEnd;
-  final String serviceDays;
+  final ProvideEmergencyServicesInput provideEmergencyServices;
+  final ServiceTypesInput serviceTypes;
+  final ServiceTimeStartInput serviceTimeStart;
+  final ServiceTimeEndInput serviceTimeEnd;
+  final ServiceDaysInput serviceDays;
 
   @override
-  List<Object?> get props =>
-      [email, password, confirmedPassword, status, name, organization];
+  List<Object?> get props => [
+        email,
+        password,
+        confirmedPassword,
+        status,
+        name,
+        organization,
+        provideEmergencyServices,
+        serviceTypes,
+        serviceTimeStart,
+        serviceTimeEnd,
+        serviceDays,
+      ];
 
   SignupState copyWith({
     Email? email,
@@ -38,11 +49,11 @@ class SignupState extends Equatable {
     FormzStatus? status,
     NameInput? name,
     OrganizationInput? organization,
-    bool? provideEmergencyServices,
-    List<String>? serviceTypes,
-    String? serviceTimeStart,
-    String? serviceTimeEnd,
-    String? serviceDays,
+    ProvideEmergencyServicesInput? provideEmergencyServices,
+    ServiceTypesInput? serviceTypes,
+    ServiceTimeStartInput? serviceTimeStart,
+    ServiceTimeEndInput? serviceTimeEnd,
+    ServiceDaysInput? serviceDays,
   }) {
     return SignupState(
       email: email ?? this.email,

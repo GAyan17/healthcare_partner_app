@@ -33,10 +33,6 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     emit(AppointmentsRecieved(upcomingAppointments, pendingAppointments));
   }
 
-  Future<void> createAppointment(Appointment appointment) async {
-    await _appointmentRepository.createAppointment(appointment);
-  }
-
   Future<void> changeAppointmentStatusToRecieved(
       Appointment appointment) async {
     await _appointmentRepository
@@ -48,6 +44,11 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     await _appointmentRepository.updateAppointment(appointment.copyWith(
         appointmentDateTime: appointmentDateTime,
         appointmentStatus: 'Confirmed'));
+  }
+
+  Future<void> appointmentDone(Appointment appointment) async {
+    await _appointmentRepository
+        .updateAppointment(appointment.copyWith(appointmentStatus: 'Done'));
   }
 
   @override

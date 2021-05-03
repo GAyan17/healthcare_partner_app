@@ -81,7 +81,8 @@ class _ConfirmAppointmentButton extends StatefulWidget {
 }
 
 class __ConfirmAppointmentButtonState extends State<_ConfirmAppointmentButton> {
-  DateTime _appointmentDate = DateTime.now();
+  DateTime? _appointmentDate = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -98,14 +99,14 @@ class __ConfirmAppointmentButtonState extends State<_ConfirmAppointmentButton> {
                       child: Text('Cancel')),
                   ElevatedButton(
                       onPressed: () async {
-                        _appointmentDate = (await showDatePicker(
+                        _appointmentDate = await showDatePicker(
                             context: context,
-                            initialDate: DateTime(2000),
-                            firstDate: DateTime.now(),
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2000),
                             lastDate: DateTime(2050),
-                            initialEntryMode: DatePickerEntryMode.input))!;
+                            initialEntryMode: DatePickerEntryMode.input);
                         context.read<AppointmentCubit>().changeAppointmentDate(
-                            widget.appointment, _appointmentDate);
+                            widget.appointment, _appointmentDate!);
                       },
                       child: Text('Set Date')),
                 ],

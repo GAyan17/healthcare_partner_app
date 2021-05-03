@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'user.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.snake)
 class User extends Equatable {
   @JsonKey(required: true)
   final String id;
@@ -15,6 +15,12 @@ class User extends Equatable {
   final String? serviceTimeStart;
   final String? serviceTimeEnd;
   final String? serviceDays;
+  final double? avgRating;
+  final int? oneStarRatings;
+  final int? twoStarRatings;
+  final int? threeStarRatings;
+  final int? fourStarRatings;
+  final int? fiveStarRatings;
 
   const User({
     required this.id,
@@ -26,6 +32,12 @@ class User extends Equatable {
     this.serviceTimeStart,
     this.serviceTimeEnd,
     this.serviceDays,
+    this.avgRating,
+    this.oneStarRatings,
+    this.twoStarRatings,
+    this.threeStarRatings,
+    this.fourStarRatings,
+    this.fiveStarRatings,
   });
 
   static const nouser = User(id: '', email: '', name: '');
@@ -48,5 +60,11 @@ class User extends Equatable {
         serviceTimeStart,
         serviceTimeEnd,
         serviceDays,
+        avgRating,
+        oneStarRatings,
+        twoStarRatings,
+        threeStarRatings,
+        fourStarRatings,
+        fiveStarRatings,
       ];
 }

@@ -19,6 +19,7 @@ class AuthRepository {
   Stream<User> get user =>
       _firebaseAuth.authStateChanges().asyncMap((firebaseUser) async {
         if (firebaseUser != null) {
+          print(firebaseUser.toString());
           var documentSnapshot = await _firestore
               .collection(_partnerCollection)
               .doc(firebaseUser.uid)
@@ -43,6 +44,7 @@ class AuthRepository {
     required String serviceTimeStart,
     required String serviceTimeEnd,
     required String serviceDays,
+    required List<String> serviceTypes,
   }) async {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
@@ -57,6 +59,13 @@ class AuthRepository {
         serviceTimeStart: serviceTimeStart,
         serviceTimeEnd: serviceTimeEnd,
         serviceDays: serviceDays,
+        serviceTypes: serviceTypes,
+        avgRating: 0.0,
+        oneStarRatings: 0,
+        twoStarRatings: 0,
+        threeStarRatings: 0,
+        fourStarRatings: 0,
+        fiveStarRatings: 0,
       );
       await _firestore
           .collection(_partnerCollection)

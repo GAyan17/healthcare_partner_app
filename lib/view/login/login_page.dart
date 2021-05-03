@@ -6,7 +6,6 @@ import '../../cubit/cubit.dart';
 import 'login_form.dart';
 
 class LoginPage extends StatelessWidget {
-  static Page page() => MaterialPage<void>(child: LoginPage());
   @override
   Widget build(BuildContext context) {
     return Scaffold(

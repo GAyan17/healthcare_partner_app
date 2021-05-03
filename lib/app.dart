@@ -1,10 +1,12 @@
+import 'package:appointment_repository/appointment_repository.dart';
 import 'package:auth_repo/auth_repo.dart';
-import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:healthcare_partner_app/view/home/homepage.dart';
+import 'package:healthcare_partner_app/view/view.dart';
 
 import 'bloc/app/app_bloc.dart';
-import 'routes/routes.dart';
+import 'cubit/appointment/appointment_cubit.dart';
 
 class App extends StatelessWidget {
   const App({Key? key, required AuthRepository authRepository})
@@ -19,7 +21,23 @@ class App extends StatelessWidget {
       value: _authRepository,
       child: BlocProvider(
         create: (_) => AppBloc(authRepository: _authRepository),
-        child: AppView(),
+        child: MultiRepositoryProvider(
+          providers: [
+            RepositoryProvider(
+              create: (_) => AppointmentRepository(),
+            ),
+          ],
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => AppointmentCubit(
+                    context.read<AppointmentRepository>(),
+                    context.read<AppBloc>().state.user.id),
+              )
+            ],
+            child: AppView(),
+          ),
+        ),
       ),
     );
   }
@@ -30,6 +48,13 @@ class AppView extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      routes: {
+        '/': (_) =>
+            context.read<AppBloc>().state.status == AppStatus.authenticated
+                ? HomePage()
+                : LoginPage(),
+        SignUpPage.routeName: (_) => SignUpPage(),
+      },
       theme: ThemeData(
         primarySwatch: Colors.green,
         appBarTheme: AppBarTheme(
@@ -50,10 +75,10 @@ class AppView extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       themeMode: ThemeMode.system,
-      home: FlowBuilder<AppStatus>(
-        state: context.select((AppBloc bloc) => bloc.state.status),
-        onGeneratePages: onGenerateAppViewPages,
-      ),
+      // home: FlowBuilder<AppStatus>(
+      //   state: context.select((AppBloc bloc) => bloc.state.status),
+      //   onGeneratePages: onGenerateAppViewPages,
+      // ),
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:appointment_repository/appointment_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -45,6 +46,8 @@ class UpcomingAppointmentList extends StatelessWidget {
                                 .toString())
                           ],
                         ),
+                        trailing: _AppointmentDoneButton(
+                            appointment: state.upcomingAppointments[index]),
                       ),
                     );
                   },
@@ -65,5 +68,25 @@ class UpcomingAppointmentList extends StatelessWidget {
         }
       },
     );
+  }
+}
+
+class _AppointmentDoneButton extends StatefulWidget {
+  final Appointment appointment;
+
+  _AppointmentDoneButton({required this.appointment});
+
+  @override
+  __AppointmentDoneButtonState createState() => __AppointmentDoneButtonState();
+}
+
+class __AppointmentDoneButtonState extends State<_AppointmentDoneButton> {
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+        onPressed: () {
+          context.read<AppointmentCubit>().appointmentDone(widget.appointment);
+        },
+        child: Text('Appointment Done'));
   }
 }

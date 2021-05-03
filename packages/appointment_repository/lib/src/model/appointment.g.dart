@@ -19,8 +19,10 @@ Appointment _$AppointmentFromJson(Map<String, dynamic> json) {
         : DateTime.parse(json['appointment_date_time'] as String),
     symptoms: json['symptoms'] as String?,
     description: json['description'] as String?,
+    prescription: json['prescription'] as String?,
     appointmentStatus: json['appointment_status'] as String?,
     paymentStatus: json['payment_status'] as String?,
+    rating: (json['rating'] as num?)?.toDouble(),
   );
 }
 
@@ -35,6 +37,8 @@ Map<String, dynamic> _$AppointmentToJson(Appointment instance) =>
       'appointment_date_time': instance.appointmentDateTime?.toIso8601String(),
       'symptoms': instance.symptoms,
       'description': instance.description,
+      'prescription': instance.prescription,
       'appointment_status': instance.appointmentStatus,
       'payment_status': instance.paymentStatus,
+      'rating': instance.rating,
     };

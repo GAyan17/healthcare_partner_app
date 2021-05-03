@@ -14,8 +14,10 @@ class Appointment extends Equatable {
   final DateTime? appointmentDateTime;
   final String? symptoms;
   final String? description;
+  final String? prescription;
   final String? appointmentStatus;
   final String? paymentStatus;
+  final double? rating;
 
   Appointment({
     required this.id,
@@ -24,11 +26,13 @@ class Appointment extends Equatable {
     required this.patientName,
     required this.patientId,
     required this.patientAge,
-    required this.appointmentDateTime,
+    this.appointmentDateTime,
     required this.symptoms,
-    required this.description,
+    this.description,
+    this.prescription,
     required this.appointmentStatus,
     required this.paymentStatus,
+    this.rating,
   });
 
   Appointment copyWith({
@@ -41,8 +45,10 @@ class Appointment extends Equatable {
     DateTime? appointmentDateTime,
     String? symptoms,
     String? description,
+    String? prescription,
     String? appointmentStatus,
     String? paymentStatus,
+    double? rating,
   }) {
     return Appointment(
       id: id ?? this.id,
@@ -54,8 +60,10 @@ class Appointment extends Equatable {
       appointmentDateTime: appointmentDateTime ?? this.appointmentDateTime,
       symptoms: symptoms ?? this.symptoms,
       description: description ?? this.description,
+      prescription: prescription ?? this.prescription,
       appointmentStatus: appointmentStatus ?? this.appointmentStatus,
       paymentStatus: paymentStatus ?? this.paymentStatus,
+      rating: rating ?? this.rating,
     );
   }
 
@@ -77,5 +85,7 @@ class Appointment extends Equatable {
         description,
         appointmentStatus,
         paymentStatus,
+        prescription,
+        rating,
       ];
 }

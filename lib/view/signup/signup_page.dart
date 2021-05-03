@@ -8,9 +8,7 @@ import 'signup_form.dart';
 class SignUpPage extends StatelessWidget {
   const SignUpPage({Key? key}) : super(key: key);
 
-  static Route route() => MaterialPageRoute(
-        builder: (_) => SignUpPage(),
-      );
+  static const String routeName = '/sign_up_page';
 
   @override
   Widget build(BuildContext context) {

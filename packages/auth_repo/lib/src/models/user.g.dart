@@ -13,13 +13,19 @@ User _$UserFromJson(Map<String, dynamic> json) {
     email: json['email'] as String?,
     name: json['name'] as String?,
     organization: json['organization'] as String?,
-    provideEmergencyServices: json['provideEmergencyServices'] as bool?,
-    serviceTypes: (json['serviceTypes'] as List<dynamic>?)
+    provideEmergencyServices: json['provide_emergency_services'] as bool?,
+    serviceTypes: (json['service_types'] as List<dynamic>?)
         ?.map((e) => e as String)
         .toList(),
-    serviceTimeStart: json['serviceTimeStart'] as String?,
-    serviceTimeEnd: json['serviceTimeEnd'] as String?,
-    serviceDays: json['serviceDays'] as String?,
+    serviceTimeStart: json['service_time_start'] as String?,
+    serviceTimeEnd: json['service_time_end'] as String?,
+    serviceDays: json['service_days'] as String?,
+    avgRating: (json['avg_rating'] as num?)?.toDouble(),
+    oneStarRatings: json['one_star_ratings'] as int?,
+    twoStarRatings: json['two_star_ratings'] as int?,
+    threeStarRatings: json['three_star_ratings'] as int?,
+    fourStarRatings: json['four_star_ratings'] as int?,
+    fiveStarRatings: json['five_star_ratings'] as int?,
   );
 }
 
@@ -28,9 +34,15 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'email': instance.email,
       'name': instance.name,
       'organization': instance.organization,
-      'provideEmergencyServices': instance.provideEmergencyServices,
-      'serviceTypes': instance.serviceTypes,
-      'serviceTimeStart': instance.serviceTimeStart,
-      'serviceTimeEnd': instance.serviceTimeEnd,
-      'serviceDays': instance.serviceDays,
+      'provide_emergency_services': instance.provideEmergencyServices,
+      'service_types': instance.serviceTypes,
+      'service_time_start': instance.serviceTimeStart,
+      'service_time_end': instance.serviceTimeEnd,
+      'service_days': instance.serviceDays,
+      'avg_rating': instance.avgRating,
+      'one_star_ratings': instance.oneStarRatings,
+      'two_star_ratings': instance.twoStarRatings,
+      'three_star_ratings': instance.threeStarRatings,
+      'four_star_ratings': instance.fourStarRatings,
+      'five_star_ratings': instance.fiveStarRatings,
     };

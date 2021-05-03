@@ -301,7 +301,7 @@ class __ServiceTimeStartInputState extends State<_ServiceTimeStartInput> {
                     _timeOfDay = pickedTime;
                     context
                         .read<SignupCubit>()
-                        .serviceTimeStartChanged(_timeOfDay.toString());
+                        .serviceTimeStartChanged(_timeOfDay.format(context));
                   });
                 }
               },
@@ -354,7 +354,7 @@ class __ServiceTimeEndInputState extends State<_ServiceTimeEndInput> {
                     _timeOfDay = pickedTime;
                     context
                         .read<SignupCubit>()
-                        .serviceTimeEndChanged(_timeOfDay.toString());
+                        .serviceTimeEndChanged(_timeOfDay.format(context));
                   });
                 }
               },

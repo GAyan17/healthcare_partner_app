@@ -2,22 +2,18 @@ import 'package:auth_repo/auth_repo.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
+import 'package:healthcare_partner_app/models/auth/provide_emergency_services.dart';
+import 'package:healthcare_partner_app/models/auth/service_days.dart';
+import 'package:healthcare_partner_app/models/auth/service_time_end.dart';
+import 'package:healthcare_partner_app/models/auth/service_time_start.dart';
+import 'package:healthcare_partner_app/models/auth/service_types.dart';
 
 import '../../models/models.dart';
 
 part 'signup_state.dart';
 
 class SignupCubit extends Cubit<SignupState> {
-  SignupCubit(this._authRepository)
-      : super(
-          SignupState(
-            provideEmergencyServices: false,
-            serviceTimeStart: '',
-            serviceTimeEnd: '',
-            serviceDays: '',
-            serviceTypes: <String>[],
-          ),
-        );
+  SignupCubit(this._authRepository) : super(SignupState());
 
   final AuthRepository _authRepository;
 
@@ -29,6 +25,13 @@ class SignupCubit extends Cubit<SignupState> {
         email,
         state.password,
         state.confirmedPassword,
+        state.name,
+        state.organization,
+        state.serviceTimeStart,
+        state.serviceTimeEnd,
+        state.serviceDays,
+        state.serviceTypes,
+        state.provideEmergencyServices,
       ]),
     ));
   }
@@ -47,6 +50,13 @@ class SignupCubit extends Cubit<SignupState> {
         state.email,
         password,
         state.confirmedPassword,
+        state.name,
+        state.organization,
+        state.serviceTimeStart,
+        state.serviceTimeEnd,
+        state.serviceDays,
+        state.serviceTypes,
+        state.provideEmergencyServices,
       ]),
     ));
   }
@@ -62,6 +72,13 @@ class SignupCubit extends Cubit<SignupState> {
         state.email,
         state.password,
         confirmedPassword,
+        state.name,
+        state.organization,
+        state.serviceTimeStart,
+        state.serviceTimeEnd,
+        state.serviceDays,
+        state.serviceTypes,
+        state.provideEmergencyServices,
       ]),
     ));
   }
@@ -76,6 +93,11 @@ class SignupCubit extends Cubit<SignupState> {
         state.confirmedPassword,
         name,
         state.organization,
+        state.serviceTimeStart,
+        state.serviceTimeEnd,
+        state.serviceDays,
+        state.serviceTypes,
+        state.provideEmergencyServices,
       ]),
     ));
   }
@@ -89,7 +111,12 @@ class SignupCubit extends Cubit<SignupState> {
         state.password,
         state.confirmedPassword,
         state.name,
+        state.serviceTimeStart,
+        state.serviceTimeEnd,
+        state.serviceTypes,
         org,
+        state.provideEmergencyServices,
+        state.serviceDays,
       ]),
     ));
   }
@@ -101,30 +128,106 @@ class SignupCubit extends Cubit<SignupState> {
         serviceValues.add(values[i]);
       }
     }
-    emit(state.copyWith(serviceTypes: serviceValues));
+    final serviceTypes = ServiceTypesInput.dirty(value: serviceValues);
+    emit(state.copyWith(
+      serviceTypes: serviceTypes,
+      status: Formz.validate([
+        state.email,
+        state.password,
+        state.confirmedPassword,
+        state.name,
+        state.organization,
+        state.serviceTimeStart,
+        state.serviceTimeEnd,
+        state.serviceDays,
+        serviceTypes,
+        state.provideEmergencyServices,
+      ]),
+    ));
   }
 
-  void serviceTimeStartChanged(String serviceTimeStart) {
-    emit(state.copyWith(serviceTimeStart: serviceTimeStart));
+  void serviceTimeStartChanged(String value) {
+    final serviceTimeStart = ServiceTimeStartInput.dirty(value: value);
+    emit(state.copyWith(
+      serviceTimeStart: serviceTimeStart,
+      status: Formz.validate([
+        state.email,
+        state.password,
+        state.confirmedPassword,
+        state.name,
+        state.organization,
+        serviceTimeStart,
+        state.serviceTimeEnd,
+        state.serviceDays,
+        state.serviceTypes,
+        state.provideEmergencyServices,
+      ]),
+    ));
   }
 
-  void serviceTimeEndChanged(String serviceTimeEnd) {
-    emit(state.copyWith(serviceTimeEnd: serviceTimeEnd));
+  void serviceTimeEndChanged(String value) {
+    final serviceTimeEnd = ServiceTimeEndInput.dirty(value: value);
+    emit(state.copyWith(
+      serviceTimeEnd: serviceTimeEnd,
+      status: Formz.validate([
+        state.email,
+        state.password,
+        state.confirmedPassword,
+        state.name,
+        state.organization,
+        state.serviceTimeStart,
+        serviceTimeEnd,
+        state.serviceDays,
+        state.serviceTypes,
+        state.provideEmergencyServices,
+      ]),
+    ));
   }
 
   void serviceDaysChanged(List<bool> days) {
     final _days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-    var serviceDays = '';
+    var values = '';
     for (var i = 0; i < days.length; i++) {
       if (days[i]) {
-        serviceDays = serviceDays + _days[i];
+        values = values + _days[i];
       }
     }
-    emit(state.copyWith(serviceDays: serviceDays));
+    final serviceDays = ServiceDaysInput.dirty(value: values);
+    emit(state.copyWith(
+      serviceDays: serviceDays,
+      status: Formz.validate([
+        state.email,
+        state.password,
+        state.confirmedPassword,
+        state.name,
+        state.organization,
+        state.serviceTimeStart,
+        state.serviceTimeEnd,
+        serviceDays,
+        state.serviceTypes,
+        state.provideEmergencyServices,
+      ]),
+    ));
   }
 
-  void provideEmergencyServicesChanged(bool provideEmergencyServices) {
-    emit(state.copyWith(provideEmergencyServices: provideEmergencyServices));
+  void provideEmergencyServicesChanged(bool value) {
+    final provideEmergencyServices =
+        ProvideEmergencyServicesInput.dirty(value: value);
+    emit(state.copyWith(
+      provideEmergencyServices: provideEmergencyServices,
+      status: Formz.validate([
+        state.email,
+        state.password,
+        state.confirmedPassword,
+        state.name,
+        state.organization,
+        state.serviceTimeStart,
+        state.serviceTimeEnd,
+        state.serviceTypes,
+        state.serviceDays,
+        provideEmergencyServices,
+      ]),
+    ));
   }
 
   Future<void> signUpFormSubmitted() async {
@@ -136,10 +239,11 @@ class SignupCubit extends Cubit<SignupState> {
         password: state.password.value,
         name: state.name.value,
         organization: state.organization.value,
-        provideEmergencyServices: state.provideEmergencyServices,
-        serviceDays: state.serviceDays,
-        serviceTimeEnd: state.serviceTimeEnd,
-        serviceTimeStart: state.serviceTimeStart,
+        provideEmergencyServices: state.provideEmergencyServices.value,
+        serviceDays: state.serviceDays.value,
+        serviceTimeEnd: state.serviceTimeEnd.value,
+        serviceTimeStart: state.serviceTimeStart.value,
+        serviceTypes: state.serviceTypes.value,
       );
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } on Exception {
