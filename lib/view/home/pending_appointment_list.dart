@@ -95,7 +95,7 @@ class __ConfirmAppointmentButtonState extends State<_ConfirmAppointmentButton> {
                 content: Text(_appointmentDate.toString().split(":")[0]),
                 actions: [
                   ElevatedButton(
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () => Navigator.of(ctx).pop(),
                       child: Text('Cancel')),
                   ElevatedButton(
                       onPressed: () async {
@@ -107,6 +107,7 @@ class __ConfirmAppointmentButtonState extends State<_ConfirmAppointmentButton> {
                             initialEntryMode: DatePickerEntryMode.input);
                         context.read<AppointmentCubit>().changeAppointmentDate(
                             widget.appointment, _appointmentDate!);
+                        Navigator.of(ctx).pop();
                       },
                       child: Text('Set Date')),
                 ],

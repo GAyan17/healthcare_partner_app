@@ -25,8 +25,9 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     appointments.forEach((apt) {
       if (apt.appointmentStatus == 'Pending') {
         pendingAppointments.add(apt);
-      } else if (apt.appointmentDateTime!
-          .isAfter(DateTime(today.year, today.month, today.day))) {
+      } else if (apt.appointmentStatus != 'Done' &&
+          apt.appointmentDateTime!
+              .isAfter(DateTime(today.year, today.month, today.day))) {
         upcomingAppointments.add(apt);
       }
     });

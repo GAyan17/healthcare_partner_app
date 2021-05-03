@@ -55,7 +55,7 @@ class Appointment extends Equatable {
       partnerId: partnerId ?? this.partnerId,
       partnerName: partnerName ?? this.partnerName,
       patientName: patientName ?? this.patientName,
-      patientId: patientId ?? this.partnerId,
+      patientId: patientId ?? this.patientId,
       patientAge: patientAge ?? this.patientAge,
       appointmentDateTime: appointmentDateTime ?? this.appointmentDateTime,
       symptoms: symptoms ?? this.symptoms,

@@ -2,11 +2,6 @@ import 'package:auth_repo/auth_repo.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
-import 'package:healthcare_partner_app/models/auth/provide_emergency_services.dart';
-import 'package:healthcare_partner_app/models/auth/service_days.dart';
-import 'package:healthcare_partner_app/models/auth/service_time_end.dart';
-import 'package:healthcare_partner_app/models/auth/service_time_start.dart';
-import 'package:healthcare_partner_app/models/auth/service_types.dart';
 
 import '../../models/models.dart';
 

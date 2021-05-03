@@ -456,7 +456,11 @@ class _SignUpButton extends StatelessWidget {
                   // primary: Colors.orangeAccent,
                 ),
                 onPressed: state.status.isValidated
-                    ? () => context.read<SignupCubit>().signUpFormSubmitted()
+                    ? () {
+                        context.read<SignupCubit>().signUpFormSubmitted();
+                        Navigator.of(context)
+                            .popUntil((route) => route.isFirst);
+                      }
                     : null,
                 child: const Text('SIGN UP'),
               );

@@ -49,10 +49,15 @@ class AppView extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {
-        '/': (_) =>
-            context.read<AppBloc>().state.status == AppStatus.authenticated
-                ? HomePage()
-                : LoginPage(),
+        '/': (_) => BlocBuilder<AppBloc, AppState>(
+              builder: (context, state) {
+                if (state.status == AppStatus.authenticated) {
+                  return HomePage();
+                } else {
+                  return LoginPage();
+                }
+              },
+            ),
         SignUpPage.routeName: (_) => SignUpPage(),
       },
       theme: ThemeData(
